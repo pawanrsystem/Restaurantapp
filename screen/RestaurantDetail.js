@@ -90,7 +90,7 @@ const RestaurantDetail = ({ route, navigation }) => {
                         />
                     </View>
                     <View style={{
-                        height: 115, width: '80%', borderColor: '#b4bbc6', opacity: 0.5, borderWidth: 1, borderRadius: 7, textAlignVertical: 'top', marginBottom: 30
+                        height: 115, width: '88%', borderColor: '#b4bbc6', opacity: 0.5, borderWidth: 1, borderRadius: 7, textAlignVertical: 'top', marginBottom: 30
                         , backgroundColor: 'white'
                     }}>
                         <TextInput
@@ -100,11 +100,15 @@ const RestaurantDetail = ({ route, navigation }) => {
                         />
                         <TouchableOpacity style={{
                             position: 'absolute', bottom: 0,
-                            right: 0,
+                            right: 0
                         }}>
                             <Text style={styles.button}>Send</Text>
                         </TouchableOpacity>
                     </View>
+                    <View style={{ flexDirection: 'row', width: '100%', paddingStart: 10, color: 'black' }}>
+                        <Text style={{ paddingStart: 10 }}>Comments 130</Text>
+                    </View>
+
                     <FlatList
                         style={{ width: '100%' }}
                         nestedScrollEnabled={true}
@@ -112,9 +116,18 @@ const RestaurantDetail = ({ route, navigation }) => {
                         data={comments}
                         renderItem={({ item }) => {
                             console.log('---value refreshed--------')
-                            return <View >
-                                <Text style={{ width: '100%', padding: 10, textAlign: 'center' }}>{item.title}</Text>
+                            return <View style={{ margin: 20 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={require("../assets/dummy_user.png")} style={{ height: 35, width: 35, borderRadius: 20 }} />
+                                    <Text style={{ paddingStart: 10 }}>{item.title}</Text>
+                                    <Text style={{ paddingStart: 10, color: '#B4BBC6' }}>24 min</Text>
+
+                                </View>
+                                <Text>But don't you think the timing is off because many other apps have done this even earlier, causing people to switch apps?</Text>
+                                <Image source={require("../assets/dummy_user.png")} style={{ height: 189, width: '100%', marginTop: 15 }} />
+
                             </View>
+
                         }}
                     />
                 </View>
