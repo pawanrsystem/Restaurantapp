@@ -71,9 +71,9 @@ const RestaurantDetail = ({ route, navigation }) => {
                     <Text style={{ paddingTop: 20, fontSize: 30 }}>{key.first_name}</Text>
                     <Text style={{ paddingTop: 10, fontSize: 10 }}>{key.last_name}</Text>
                     <Text style={{ paddingTop: 20 }}>{key.email}</Text>
-                    <Text style={{ paddingTop: 40 }}>Share your experiance</Text>
+                    <Text style={{ paddingTop: 30 }}>Share your experiance</Text>
                     { }
-                    <View style={{ padding: 30 }}>
+                    <View style={{ padding: 10 }}>
                         <StarRating
                             starSize={30}
                             halfStarEnabled={false}
@@ -97,10 +97,13 @@ const RestaurantDetail = ({ route, navigation }) => {
                             style={{ paddingBottom: 30 }}
                             multiline={true}
                             placeholder="Type your comment here"
+                            onChangeText={text => {
+                                console.log('count' + text.length)
+                            }}
                         />
                         <TouchableOpacity style={{
                             position: 'absolute', bottom: 0,
-                            right: 0
+                            right: 0,
                         }}>
                             <Text style={styles.button}>Send</Text>
                         </TouchableOpacity>
@@ -115,15 +118,13 @@ const RestaurantDetail = ({ route, navigation }) => {
                         keyExtractor={(comments, index) => index.toString()}
                         data={comments}
                         renderItem={({ item }) => {
-                            console.log('---value refreshed--------')
-                            return <View style={{ margin: 20 }}>
+                            return <View style={{ marginHorizontal: 20, marginTop: 10 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Image source={require("../assets/dummy_user.png")} style={{ height: 35, width: 35, borderRadius: 20 }} />
                                     <Text style={{ paddingStart: 10 }}>{item.title}</Text>
                                     <Text style={{ paddingStart: 10, color: '#B4BBC6' }}>24 min</Text>
-
                                 </View>
-                                <Text>But don't you think the timing is off because many other apps have done this even earlier, causing people to switch apps?</Text>
+                                <Text style={{ paddingTop: 5 }}>But don't you think the timing is off because many other apps have done this even earlier, causing people to switch apps?</Text>
                                 <Image source={require("../assets/dummy_user.png")} style={{ height: 189, width: '100%', marginTop: 15 }} />
 
                             </View>
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#BDBDBD",
         color: 'white',
         fontSize: 16,
-    }
+    },
 
 });
 export default RestaurantDetail;

@@ -123,7 +123,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                  <View style={{ width: '50%' }}
+                  <View style={{ width: '50%', flexDirection: 'row' }}
                   ><StarRating
                       starSize={20}
                       halfStarEnabled={false}
@@ -138,8 +138,13 @@ const RestaurantScreen = ({ route, navigation }) => {
                       }}
                       emptyStar={require("../assets/empty_star.png")}
                       fullStar={require("../assets/fill_star.png")}
-                    /></View>
-                  <Image source={require("../assets/comment_filled.png")} style={{ height: 22, width: 22 }} />
+                    />
+                    <Text style={{ paddingStart: 5 }}>+91</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={require("../assets/comment_filled.png")} style={{ height: 22, width: 22 }} />
+                    <Text style={{ paddingStart: 2 }}>5</Text>
+                  </View>
 
                 </View>
 
