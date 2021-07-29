@@ -5,6 +5,8 @@ import StarRating from 'react-native-star-rating';
 
 const RestaurantDetail = ({ route, navigation }) => {
     const [rating, setRating] = useState(0);
+    const [isCommentValue, setCommentValue] = useState(true);
+
     const [comments, setComments] = useState([
         {
             id: 1,
@@ -99,13 +101,25 @@ const RestaurantDetail = ({ route, navigation }) => {
                             placeholder="Type your comment here"
                             onChangeText={text => {
                                 console.log('count' + text.length)
+                                if (text.length === 0) {
+                                    console.log('count status true')
+
+                                    setCommentValue(true)
+                                } else {
+                                    console.log('count status false')
+
+                                    setCommentValue(false)
+
+                                }
                             }}
                         />
                         <TouchableOpacity style={{
                             position: 'absolute', bottom: 0,
                             right: 0,
                         }}>
-                            <Text style={styles.button}>Send</Text>
+                            <Text style={
+                                isCommentValue ? styles.button : styles.button_selected
+                            }>Send</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', paddingStart: 10, color: 'black' }}>
@@ -158,6 +172,17 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: "center",
         backgroundColor: "#BDBDBD",
+        color: 'white',
+        fontSize: 16,
+    }, button_selected: {
+        margin: 10,
+        width: 48,
+        borderRadius: 3,
+        height: 25,
+        alignItems: "center",
+        textAlign: 'center',
+        justifyContent: "center",
+        backgroundColor: '#FA5252',
         color: 'white',
         fontSize: 16,
     },
