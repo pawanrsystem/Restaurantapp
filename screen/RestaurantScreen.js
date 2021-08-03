@@ -4,6 +4,8 @@ import APIKit from './api/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import Geolocation from '@react-native-community/geolocation';
 
 const RestaurantScreen = ({ route, navigation }) => {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -11,29 +13,62 @@ const RestaurantScreen = ({ route, navigation }) => {
   const [loader, setLoader] = useState(false);
   const [isRender, setRender] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
-
+  const [loaderValue, setLoaderValue] = React.useState('Getting Location');
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      const getData = async () => {
-        try {
-          const value = await AsyncStorage.getItem('isLogin')
-          if (value !== null) {
-            // value previously stored
-            console.log('get value from preference ' + value)
-            setIsLogedIn(value)
-          } else {
-            console.log('get value from preference ' + value)
-            setIsLogedIn(false)
-          }
-        } catch (e) {
-          setIsLogedIn(false)
-          console.log('current value is exception' + value)
-          // error reading value
-        }
-      }
-      getData()
-      setLoader(true)
-      ApiCall()
+        LocationServicesDialogBox.checkLocationServicesIsEnabled({
+          message: "<h2>Use Location?</h2> \
+            This app wants to change your device settings:<br/><br/>\
+            Use GPS for location<br/><br/>",
+          ok: "Yes",
+          cancel: "No",
+          style: {
+            backgroundColor: 'white',
+            positiveButtonTextColor: '#000000',
+            negativeButtonTextColor: '#000000'
+          },
+          enableHighAccuracy: true,
+          showDialog: true,
+          openLocationServices: true,
+          preventOutSideTouch: true,
+          preventBackClick: true,
+          providerListener: true
+        }).then(function (success) {
+          if (success.status == "enabled") {
+            setLoader(true)
+            setLoaderValue('Getting Location')
+            Geolocation.getCurrentPosition(data => {
+              const getData = async () => {
+                try {
+                  const value = await AsyncStorage.getItem('isLogin')
+                  if (value !== null) {
+                    // value previously stored
+                    console.log('get value from preference ' + value)
+                    setIsLogedIn(value)
+                  } else {
+                    console.log('get value from preference ' + value)
+                    setIsLogedIn(false)
+                  }
+                } catch (e) {
+                  setIsLogedIn(false)
+                  console.log('current value is exception' + value)
+                }
+              }
+              getData()
+              setLoader(true)
+              setLoaderValue('Getting Restaurant List')
+              ApiCall()
+            },
+              err => alert(err.message),
+              {
+                enableHighAccuracy: false,
+                timeout: 24000,
+                maximumAge: 3000,
+              })
+          } 
+        }).catch((error) => {
+          console.log("== no click"+error.message);
+        });
     });
   }, [navigation]);
   const ApiCall = () => {
@@ -55,8 +90,7 @@ const RestaurantScreen = ({ route, navigation }) => {
         alert(error.message);
       })
   }
-  //const { key } = route.params;
-  //console.log("value is=====" + key)
+ 
   const onRefresh = () => {
     setRefreshing(true)
     //Clear old data of the list
@@ -67,7 +101,7 @@ const RestaurantScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <Spinner
         visible={loader}
-        textContent={'Loading...'}
+        textContent={loaderValue}
         textStyle={styles.spinnerTextStyle}
       />
       <View>

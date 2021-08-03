@@ -57,7 +57,7 @@ class LoginScreen extends React.Component {
       ok: "Yes",
       cancel: "No",
       style: {
-        backgroundColor: '#4f6d7a',
+        backgroundColor: 'white',
         positiveButtonTextColor: '#000000',
         negativeButtonTextColor: '#000000'
       },
@@ -75,7 +75,7 @@ class LoginScreen extends React.Component {
         alert("LOL");
       }
     }).catch((error) => {
-      console.log(error.message);
+      console.log("== no click"+error.message);
     });
 
   }
