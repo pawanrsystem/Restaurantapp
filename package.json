@@ -35,6 +35,7 @@
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-location": "^2.5.0",
     "react-native-otp-inputs": "^7.0.3",
+    "react-native-otp-verify": "^1.0.4",
     "react-native-permissions": "^3.0.5",
     "react-native-preference": "^2.2.2",
     "react-native-ratings": "^8.1.0",

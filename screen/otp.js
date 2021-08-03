@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNOtpVerify from 'react-native-otp-verify';
 
 class otp extends React.Component {
   constructor() {
@@ -10,7 +11,22 @@ class otp extends React.Component {
     this.state = {
       otp: '',
     };
+    RNOtpVerify.getHash()
+    .then(console.log)
+      .catch(console.log);
+    
+      RNOtpVerify.getOtp()
+      .then(p => RNOtpVerify.addListener(this.otpHandler))
+      .catch(p => console.log(p));
   }
+  otpHandler = (message) => {
+    const val=/(\d{4})/g.exec(message)[1]
+    console.log(/(\d{4})/g.exec(message)[1]);
+          alert('Your otp is=='+val);
+
+    RNOtpVerify.removeListener();
+    // Keyboard.dismiss();
+}
   storeData = async (value) => {
     try {
       console.log('saved value to preference ' + value)
@@ -35,6 +51,10 @@ class otp extends React.Component {
 
     }
   }
+
+  componentWillUnmount() {
+    RNOtpVerify.removeListener();
+ }
   render() {
     return (
       <View style={styles.container}>
