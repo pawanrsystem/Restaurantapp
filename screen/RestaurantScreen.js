@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 const RestaurantScreen = ({ route, navigation }) => {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -14,10 +14,11 @@ const RestaurantScreen = ({ route, navigation }) => {
   const [isRender, setRender] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderValue, setLoaderValue] = React.useState('Getting Location');
-  const [restaurantValue, setInputValue] = useState('');
+  const [restaurantInputValue, setInputValue] = useState('');
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      console.log('input value is==='+restaurantInputValue)
         LocationServicesDialogBox.checkLocationServicesIsEnabled({
           message: "<h2>Use Location?</h2> \
             This app wants to change your device settings:<br/><br/>\
@@ -40,6 +41,7 @@ const RestaurantScreen = ({ route, navigation }) => {
             setLoader(true)
             setLoaderValue('Getting Location')
             Geolocation.getCurrentPosition(data => {
+              console.log('Location is----'+data.coords.latitude)
               const getData = async () => {
                 try {
                   const value = await AsyncStorage.getItem('isLogin')
@@ -61,7 +63,10 @@ const RestaurantScreen = ({ route, navigation }) => {
               setLoaderValue('Getting Restaurant List')
               ApiCall()
             },
-              err => alert(err.message),
+              err => {
+                setLoader(false)
+                alert(err.message)
+              },
               {
                 enableHighAccuracy: false,
                 timeout: 24000,
@@ -125,7 +130,7 @@ const RestaurantScreen = ({ route, navigation }) => {
           autoCorrect={false}
           clearButtonMode="always"
           placeholder="Restaurant/Location"
-          value={restaurantValue}
+          value={restaurantInputValue}
           onChangeText={text => {
             setInputValue(text)
           }}
