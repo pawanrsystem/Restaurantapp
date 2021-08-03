@@ -14,6 +14,8 @@ const RestaurantScreen = ({ route, navigation }) => {
   const [isRender, setRender] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderValue, setLoaderValue] = React.useState('Getting Location');
+  const [restaurantValue, setInputValue] = useState('');
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
         LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -123,6 +125,10 @@ const RestaurantScreen = ({ route, navigation }) => {
           autoCorrect={false}
           clearButtonMode="always"
           placeholder="Restaurant/Location"
+          value={restaurantValue}
+          onChangeText={text => {
+            setInputValue(text)
+          }}
 
         />
       </View>
