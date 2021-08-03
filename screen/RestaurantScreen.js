@@ -70,6 +70,7 @@ const RestaurantScreen = ({ route, navigation }) => {
           console.log("== no click"+error.message);
         });
     });
+    return unsubscribe
   }, [navigation]);
   const ApiCall = () => {
     APIKit.get('/users', {
