@@ -6,7 +6,6 @@ import StarRating from 'react-native-star-rating';
 const RestaurantDetail = ({ route, navigation }) => {
     const [rating, setRating] = useState(0);
     const [isCommentValue, setCommentValue] = useState(true);
-
     const [comments, setComments] = useState([
         {
             id: 1,
@@ -36,8 +35,6 @@ const RestaurantDetail = ({ route, navigation }) => {
 
     const { key } = route.params;
 
-    console.log('value is---' + key.first_name)
-
     return (
         <View style={styles.container}>
             <View style={{ width: '100%' }} >
@@ -55,17 +52,11 @@ const RestaurantDetail = ({ route, navigation }) => {
                 }}>
                     <Image source={require("../assets/back.png")} />
                 </TouchableOpacity>
-
-
             </View>
-
             <View style={{
                 width: '100%', alignItems: 'center',
                 justifyContent: 'center'
             }}>
-
-
-
                 <FlatList
                     ListHeaderComponent={
                         <>
@@ -79,7 +70,6 @@ const RestaurantDetail = ({ route, navigation }) => {
                                 <Text style={{ paddingTop: 10, fontSize: 10 }}>{key.last_name}</Text>
                                 <Text style={{ paddingTop: 20 }}>{key.email}</Text>
                                 <Text style={{ paddingTop: 30 }}>Share your experiance</Text>
-                                { }
                                 <View style={{ padding: 10 }}>
                                     <StarRating
                                         starSize={30}
@@ -88,50 +78,41 @@ const RestaurantDetail = ({ route, navigation }) => {
                                         maxStars={5}
                                         rating={rating}
                                         selectedStar={(rating) => {
-                                            console.log('==pressed' + rating)
                                             setRating(rating)
                                         }}
                                         emptyStar={require("../assets/empty_star.png")}
                                         fullStar={require("../assets/fill_star.png")}
-
                                     />
                                 </View>
-                                <View style={{
-                                    height: 115, width: '88%', borderColor: '#b4bbc6', opacity: 0.5, borderWidth: 1, borderRadius: 7, textAlignVertical: 'top', marginBottom: 30
-                                    , backgroundColor: 'white'
+
+                                <TextInput
+                                    style={{
+                                        paddingBottom: 30, height: 115, width: '88%', borderColor: '#b4bbc6', opacity: 0.5, borderWidth: 1, borderRadius: 7, textAlignVertical: 'top', marginBottom: 30
+                                        , backgroundColor: 'white'
+                                    }}
+                                    fontSize={22}
+                                    multiline={true}
+                                    placeholder="Type your comment here"
+                                    onChangeText={text => {
+                                        if (text.length === 0) {
+                                            setCommentValue(true)
+                                        } else {
+                                            setCommentValue(false)
+                                        }
+                                    }}
+                                />
+                                <TouchableOpacity style={{
+                                    position: 'absolute', bottom: 0,
+                                    right: 0, marginBottom: 50, marginEnd: 35
                                 }}>
-                                    <TextInput
-                                        style={{ paddingBottom: 30 }}
-                                        multiline={true}
-                                        placeholder="Type your comment here"
-                                        onChangeText={text => {
-                                            console.log('count' + text.length)
-                                            if (text.length === 0) {
-                                                console.log('count status true')
-
-                                                setCommentValue(true)
-                                            } else {
-                                                console.log('count status false')
-
-                                                setCommentValue(false)
-
-                                            }
-                                        }}
-                                    />
-                                    <TouchableOpacity style={{
-                                        position: 'absolute', bottom: 0,
-                                        right: 0,
-                                    }}>
-                                        <Text style={
-                                            isCommentValue ? styles.button : styles.button_selected
-                                        }>Send</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                    <Text style={
+                                        isCommentValue ? styles.button : styles.button_selected
+                                    }>Send</Text>
+                                </TouchableOpacity>
                                 <View style={{ flexDirection: 'row', width: '100%', paddingStart: 10, color: 'black' }}>
                                     <Text style={{ paddingStart: 10 }}>Comments 130</Text>
                                 </View>
                             </View>
-
                         </>
                     }
                     style={{ width: '100%' }}
@@ -147,14 +128,11 @@ const RestaurantDetail = ({ route, navigation }) => {
                             </View>
                             <Text style={{ paddingTop: 5 }}>But don't you think the timing is off because many other apps have done this even earlier, causing people to switch apps?</Text>
                             <Image source={require("../assets/dummy_user.png")} style={{ height: 189, width: '100%', marginTop: 15 }} />
-
                         </View>
-
                     }}
                 />
             </View>
         </View >
-
     );
 }
 

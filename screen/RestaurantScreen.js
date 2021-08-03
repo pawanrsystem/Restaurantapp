@@ -37,11 +37,13 @@ const RestaurantScreen = ({ route, navigation }) => {
     });
   }, [navigation]);
   const ApiCall = () => {
-    APIKit.get('/users?page=2').then(function (response) {
+    APIKit.get('/users', {
+      params: {
+        page: 2
+      }
+    }).then(function (response) {
       // handle success
       //alert(JSON.stringify(response.data));
-      console.log(response.data.data)
-      console.log('recieved data')
       setRestaurantData(response.data.data)
       setLoader(false)
       setRefreshing(false)
@@ -97,7 +99,6 @@ const RestaurantScreen = ({ route, navigation }) => {
         data={restaurantData}
         extraData={isRender}
         renderItem={({ item }) => {
-          console.log('---value refreshed--------')
           return <TouchableOpacity style={{
             marginTop: 15, marginBottom: 15, shadowOffset: { width: 10, height: 10 },
             shadowColor: 'black',
@@ -107,7 +108,6 @@ const RestaurantScreen = ({ route, navigation }) => {
             borderRadius: 10
           }} onPress={event => {
             //  alert(`${item.name}`);
-            console.log('pressed' + item.id)
             navigation.navigate("Restaurant detail", { key: item })
           }}>
             <View style={{ flexDirection: 'row' }} >
