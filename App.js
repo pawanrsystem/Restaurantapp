@@ -8,6 +8,7 @@ import Camera from './screen/camera';
 import otp from './screen/otp';
 import Profile from './screen/Profile';
 import RestaurantDetail from './screen/RestaurantDetail';
+import Map from './screen/Map';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -37,6 +38,11 @@ const App = () => {
           name="camera"
           component={Camera}
           options={{title: 'Camera Screen'}}
+        />
+        <Stack.Screen
+          name="Map"
+          component={Map}
+          options={{title: 'Map Screen'}}
         />
         <Stack.Screen
           name="otp"

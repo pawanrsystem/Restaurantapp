@@ -88,6 +88,13 @@ const RestaurantDetail = ({route, navigation}) => {
                   source={{uri: key.avatar}}
                   style={{height: 250, width: '80%', marginTop: 20}}
                 />
+                <Text
+                  style={{paddingTop: 20, fontSize: 30}}
+                  onPress={() => {
+                    navigation.navigate('Map', {key: '100'});
+                  }}>
+                  Go to Map
+                </Text>
                 <Text style={{paddingTop: 20, fontSize: 30}}>
                   {key.first_name}
                 </Text>
