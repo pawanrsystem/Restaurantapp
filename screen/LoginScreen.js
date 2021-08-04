@@ -11,7 +11,6 @@ class LoginScreen extends React.Component {
       console.log('saved value to preference ' + value);
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('data', jsonValue);
-      console.log('saved value to preference ' + value);
     } catch (e) {
       // saving error
     }
