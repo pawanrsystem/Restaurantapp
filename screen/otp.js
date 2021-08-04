@@ -27,7 +27,6 @@ class otp extends React.Component {
   otpHandler = message => {
     const val = /(\d{4})/g.exec(message)[1];
     this.setState({otp: val});
-    console.log(/(\d{4})/g.exec(message)[1]);
     RNOtpVerify.removeListener();
     // Keyboard.dismiss();
   };
