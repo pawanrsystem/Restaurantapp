@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  InteractionManager,
 } from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 
@@ -15,6 +16,10 @@ class HomeScreen extends React.Component {
     this.state = {
       phonenumber: '',
     };
+    this.input = React.createRef();
+    InteractionManager.runAfterInteractions(() => {
+      this.input.current.focus();
+    });
   }
   loginClick() {
     if (!this.state.phonenumber.trim()) {
@@ -30,7 +35,6 @@ class HomeScreen extends React.Component {
       this.props.navigation.navigate('otp', {key: '100'});
     }
   }
-
   render() {
     return (
       <View style={styles.container}>
@@ -76,6 +80,8 @@ class HomeScreen extends React.Component {
           </View>
           <View style={styles.inputView}>
             <TextInput
+              ref={this.input}
+              autoFocus={true}
               keyboardType="numeric"
               onChangeText={value =>
                 this.setState({phonenumber: value.replace(/[^0-9]/g, '')})
