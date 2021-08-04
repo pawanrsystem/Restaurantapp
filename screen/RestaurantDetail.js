@@ -58,6 +58,7 @@ const RestaurantDetail = ({ route, navigation }) => {
                 justifyContent: 'center'
             }}>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
                         <>
                             <View style={{

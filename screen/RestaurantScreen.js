@@ -138,6 +138,7 @@ const RestaurantScreen = ({ route, navigation }) => {
         />
       </View>
       <FlatList
+        showsVerticalScrollIndicator={false}
         keyExtractor={(restaurantData, index) => index.toString()}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -168,7 +169,6 @@ const RestaurantScreen = ({ route, navigation }) => {
                   <Image source={require("../assets/heart_filled.png")} style={{ height: 22, width: 22 }} />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
                   <View style={{ width: '50%', flexDirection: 'row' }}
                   ><StarRating
                       starSize={20}
@@ -191,9 +191,7 @@ const RestaurantScreen = ({ route, navigation }) => {
                     <Image source={require("../assets/comment_filled.png")} style={{ height: 22, width: 22 }} />
                     <Text style={{ paddingStart: 2 }}>5</Text>
                   </View>
-
                 </View>
-
               </View>
             </View>
           </TouchableOpacity>
