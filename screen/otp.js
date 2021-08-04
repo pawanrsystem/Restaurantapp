@@ -28,8 +28,6 @@ class otp extends React.Component {
     const val = /(\d{4})/g.exec(message)[1];
     this.setState({otp: val});
     console.log(/(\d{4})/g.exec(message)[1]);
-    alert('Your otp is==' + val);
-
     RNOtpVerify.removeListener();
     // Keyboard.dismiss();
   };
