@@ -20,7 +20,8 @@ class otp extends React.Component {
       .catch(p => console.log(p));
   }
   otpHandler = (message) => {
-    const val=/(\d{4})/g.exec(message)[1]
+    const val = /(\d{4})/g.exec(message)[1]
+    this.setState({ otp: val })
     console.log(/(\d{4})/g.exec(message)[1]);
           alert('Your otp is=='+val);
 
@@ -92,8 +93,9 @@ class otp extends React.Component {
           <OTPInputView
             style={{ width: '70%', height: 50 }}
             pinCount={4}
-            // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-            // onCodeChanged = {code => { this.setState({code})}}
+            
+             code={this.state.otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+             onCodeChanged = {code => {  this.setState({ otp: code })}}
             autoFocusOnLoad
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
@@ -178,8 +180,9 @@ const styles = StyleSheet.create({
 
   borderStyleHighLighted: {
     borderColor: "white",
-  },
+    color:'black',
 
+  },
   underlineStyleBase: {
     width: 40,
     height: 45,
@@ -188,12 +191,12 @@ const styles = StyleSheet.create({
     borderColor: "white",
     backgroundColor: 'white',
     borderRadius: 8,
-
+    color:'black',
 
   },
-
   underlineStyleHighLighted: {
     borderColor: "white",
+    color:'black',
   },
 
 });
