@@ -2,7 +2,7 @@
 // https://aboutreact.com/example-of-image-picker-in-react-native/
 
 // Import React
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 // Import required components
 import {
   SafeAreaView,
@@ -17,10 +17,7 @@ import {
 
 // Import Image Picker
 // import ImagePicker from 'react-native-image-picker';
-import {
-  launchCamera,
-  launchImageLibrary
-} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const App = () => {
   const [filePath, setFilePath] = useState();
@@ -64,7 +61,7 @@ const App = () => {
     } else return true;
   };
 
-  const captureImage = async (type) => {
+  const captureImage = async type => {
     let options = {
       mediaType: type,
       maxWidth: 300,
@@ -77,7 +74,7 @@ const App = () => {
     let isCameraPermitted = await requestCameraPermission();
     let isStoragePermitted = await requestExternalWritePermission();
     if (isCameraPermitted && isStoragePermitted) {
-      launchCamera(options, (response) => {
+      launchCamera(options, response => {
         console.log('Response = ', response);
 
         if (response.didCancel) {
@@ -94,20 +91,19 @@ const App = () => {
           return;
         }
 
-
         setFilePath(response.assets[0].uri);
       });
     }
   };
 
-  const chooseFile = (type) => {
+  const chooseFile = type => {
     let options = {
       mediaType: type,
       maxWidth: 300,
       maxHeight: 550,
       quality: 1,
     };
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response);
       if (response.didCancel) {
         alert('User cancelled camera picker');
@@ -123,12 +119,11 @@ const App = () => {
         return;
       }
       setFilePath(response.assets[0].uri);
-
     });
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         {/* <Image
           source={{
@@ -136,26 +131,19 @@ const App = () => {
           }}
           style={styles.imageStyle}
         /> */}
-        <Image
-          source={{ uri: filePath }}
-          style={styles.imageStyle}
-        />
+        <Image source={{uri: filePath}} style={styles.imageStyle} />
         <Text style={styles.textStyle}>{filePath}</Text>
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.buttonStyle}
           onPress={() => captureImage('photo')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Image
-          </Text>
+          <Text style={styles.textStyle}>Launch Camera for Image</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.buttonStyle}
           onPress={() => captureImage('video')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Video
-          </Text>
+          <Text style={styles.textStyle}>Launch Camera for Video</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
