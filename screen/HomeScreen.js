@@ -7,215 +7,410 @@ import {
   TextInput,
   TouchableOpacity,
   InteractionManager,
+  Alert,
 } from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import auth from '@react-native-firebase/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNOtpVerify from 'react-native-otp-verify';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class HomeScreen extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      phonenumber: '',
-      loader: false,
-      otp: '',
-      isOptVisible: false,
-    };
+const HomeScreen = ({route, navigation}) => {
+  const [phonenumber, setphonenumber] = useState('');
 
-    this.input = React.createRef();
-    InteractionManager.runAfterInteractions(() => {
-      this.input.current.focus();
-    });
-    RNOtpVerify.getHash().then(console.log).catch(console.log);
-    RNOtpVerify.getOtp()
-      .then(p => RNOtpVerify.addListener(this.otpHandler))
-      .catch(p => console.log(p));
-  }
+  const [loader, setLoader] = useState(false);
 
-  otpHandler = message => {
-    const val = /(\d{4})/g.exec(message)[1];
-    this.setState({otp: val});
-    RNOtpVerify.removeListener();
-    // Keyboard.dismiss();
-  };
+  const [otp, setotp] = useState('');
 
-  storeData = async value => {
+  const [isOptVisible, setisOptVisible] = useState(false);
+  const [confirm, setConfirm] = useState(null);
+
+  const storeData = async value => {
     try {
       console.log('saved value to preference ' + value);
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem('isLogin', jsonValue);
+      navigation.pop(1);
     } catch (e) {
+      console.log('error is---' + e);
       // saving error
     }
   };
-  _otpClick() {
-    if (!this.state.otp.trim()) {
+  const _otpClick = () => {
+    if (!otp.trim()) {
       alert('Please Enter otp');
       return;
     }
-    if (this.state.otp.length < 4) {
+    if (otp.length < 4) {
       alert('Please Enter valid otp of length 10');
     } else {
       this.storeData(true);
       //this.props.navigation.navigate("detail", { key: '100' })
       //this.props.navigation.goBack();
-      this.props.navigation.pop(2);
+      navigation.pop(2);
     }
-  }
-  componentWillUnmount() {
-    RNOtpVerify.removeListener();
-  }
-  signInWithPhoneNumber = async phoneNumber => {
+  };
+
+  const verifyOtpClick = async () => {
+    if (otp.length > 3) {
+      try {
+        console.log('New Value is----' + confirm.verificationId);
+        const codeConfirmation = await confirm.confirm('234567');
+        if (codeConfirmation.user.uid.length > 0) {
+          storeData(true);
+        }
+      } catch (error) {
+        alert(error);
+      }
+    } else {
+      Alert('Enter Valid Otp.');
+    }
+  };
+
+  const signInWithPhoneNumber = async phoneNumber => {
     console.log('Phone number is---' + phoneNumber);
-    this.setState({loader: true});
+    //this.setState({loader: true});
+    setLoader(true);
     try {
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      this.setState({loader: false});
+      // this.setState({loader: false});
+
       if (confirmation.verificationId.length > 0) {
-        this.setState({isOptVisible: true});
+        setLoader(false);
+
+        setisOptVisible(true);
+        //this.setState({isOptVisible: true});
         // this.props.navigation.navigate('otp', {
         //   key: confirmation,
         // });
-        try {
-          const codeConfirmation = await confirmation.confirm('234567');
-          console.log(
-            'Out put value ---' + codeConfirmation.additionalUserInfo.isNewUser,
-          );
-          console.log('Out put value ---' + codeConfirmation.user.uid);
-          console.log(
-            'Out put value ---' +
-              codeConfirmation.additionalUserInfo.providerId,
-          );
-          console.log(
-            'Out put value ---' + codeConfirmation.additionalUserInfo.username,
-          );
-        } catch (error) {
-          alert(error);
-        }
+        setConfirm(confirmation);
       } else {
-        this.setState({isOptVisible: false});
+        setisOptVisible(false);
       }
     } catch (err) {
-      this.setState({isOptVisible: false});
-
-      this.setState({loader: false});
+      setisOptVisible(false);
+      setLoader(false);
       alert(err);
-
       console.log('error is===' + err);
     }
   };
-  loginClick() {
-    if (!this.state.phonenumber.trim()) {
+  const loginClick = () => {
+    if (!phonenumber.trim()) {
       alert('Please Enter phone Number');
       return;
     }
-    if (
-      this.state.phonenumber.length < 10 ||
-      this.state.phonenumber.length > 10
-    ) {
+    if (phonenumber.length < 10 || phonenumber.length > 10) {
       alert('Please Enter valid phone number of length 10');
     } else {
       //this.props.navigation.navigate('otp', { key: '100' });
-      this.signInWithPhoneNumber('+91 ' + this.state.phonenumber);
+      signInWithPhoneNumber('+91 ' + phonenumber);
     }
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Spinner
-          visible={this.state.loader}
-          textContent="Loading..."
-          textStyle={styles.spinnerTextStyle}
-        />
-        <View style={{width: '100%'}}>
-          <TouchableOpacity
-            style={{
-              width: 30,
-              borderRadius: 10,
-              marginStart: 20,
-              marginTop: 40,
-              height: 30,
-              backgroundColor: '#FA5252',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => {
-              console.log('clicked');
-              this.props.navigation.pop(1);
-            }}>
-            <Image source={require('../assets/back.png')} />
-          </TouchableOpacity>
-        </View>
-        <View
+  };
+
+  return (
+    <View style={styles.container}>
+      <Spinner
+        visible={loader}
+        textContent="Loading..."
+        textStyle={styles.spinnerTextStyle}
+      />
+      <View style={{width: '100%'}}>
+        <TouchableOpacity
           style={{
-            flex: 1,
+            width: 30,
+            borderRadius: 10,
+            marginStart: 20,
+            marginTop: 40,
+            height: 30,
+            backgroundColor: '#FA5252',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
+          }}
+          onPress={() => {
+            console.log('clicked');
+            navigation.pop(1);
           }}>
-          <StatusBar style="auto" />
-          <Image
-            source={require('../assets/crokery.png')}
-            style={{height: 127, width: 128}}
-          />
-          <Text style={styles.title}>rate my Dine</Text>
-          <Text style={{fontSize: 20, color: '#2E3A59'}}>
-            Where you find best reataurants.
+          <Image source={require('../assets/back.png')} />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}>
+        <StatusBar style="auto" />
+        <Image
+          source={require('../assets/crokery.png')}
+          style={{height: 127, width: 128}}
+        />
+        <Text style={styles.title}>rate my Dine</Text>
+        <Text style={{fontSize: 20, color: '#2E3A59'}}>
+          Where you find best reataurants.
+        </Text>
+        <View style={styles.forgot_button}>
+          <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
+            We will send a one time SMS message Carrie rate may apply
           </Text>
-          <View style={styles.forgot_button}>
-            <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
-              We will send a one time SMS message Carrie rate may apply
-            </Text>
-          </View>
-          {this.state.isOptVisible ? (
-            <OTPInputView
-              style={{width: '70%', height: 50}}
-              pinCount={4}
-              code={this.state.otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-              onCodeChanged={code => {
-                this.setState({otp: code});
+        </View>
+        {isOptVisible ? (
+          <OTPInputView
+            style={{width: '70%', height: 50}}
+            pinCount={4}
+            code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+            onCodeChanged={code => {
+              setotp(code);
+            }}
+            autoFocusOnLoad
+            codeInputFieldStyle={styles.underlineStyleBase}
+            codeInputHighlightStyle={styles.underlineStyleHighLighted}
+            onCodeFilled={code => {
+              console.log(`Code is ${code}, you are good to go!`);
+              setotp(code);
+              //verifyOtpClick(otp);
+              //this.props.navigation.navigate("detail", { key: '100' })
+            }}
+          />
+        ) : (
+          <View style={styles.inputView}>
+            <TextInput
+              autoFocus={true}
+              keyboardType="numeric"
+              onChangeText={value => {
+                setphonenumber(value.replace(/[^0-9]/g, ''));
               }}
-              autoFocusOnLoad
-              codeInputFieldStyle={styles.underlineStyleBase}
-              codeInputHighlightStyle={styles.underlineStyleHighLighted}
-              onCodeFilled={code => {
-                console.log(`Code is ${code}, you are good to go!`);
-                this.setState({otp: code});
-                //this.props.navigation.navigate("detail", { key: '100' })
-              }}
+              style={styles.TextInput}
+              placeholder="Pone number"
+              value={phonenumber}
+              placeholderTextColor="#2C2929"
             />
-          ) : (
-            <View style={styles.inputView}>
-              <TextInput
-                ref={this.input}
-                autoFocus={true}
-                keyboardType="numeric"
-                onChangeText={value =>
-                  this.setState({phonenumber: value.replace(/[^0-9]/g, '')})
-                }
-                style={styles.TextInput}
-                placeholder="Pone number"
-                value={this.state.phonenumber}
-                placeholderTextColor="#2C2929"
-              />
-            </View>
-          )}
-
-          <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={this.loginClick.bind(this)}>
+          </View>
+        )}
+        {!isOptVisible ? (
+          <TouchableOpacity style={styles.loginBtn} onPress={loginClick}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={{color: '#fff', fontSize: 20}}>Get your OTP </Text>
               <Image source={require('../assets/next.png')} />
             </View>
           </TouchableOpacity>
-        </View>
+        ) : (
+          <TouchableOpacity style={styles.loginBtn} onPress={verifyOtpClick}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{color: '#fff', fontSize: 20}}>
+                Verify your OTP{' '}
+              </Text>
+              <Image source={require('../assets/next.png')} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
+// class HomeScreen extends React.Component {
+//   constructor() {
+//     super();
+//     this.state = {
+//       phonenumber: '',
+//       loader: false,
+//       otp: '',
+//       isOptVisible: false,
+//     };
+
+//     this.input = React.createRef();
+//     InteractionManager.runAfterInteractions(() => {
+//       this.input.current.focus();
+//     });
+//     RNOtpVerify.getHash().then(console.log).catch(console.log);
+//     RNOtpVerify.getOtp()
+//       .then(p => RNOtpVerify.addListener(this.otpHandler))
+//       .catch(p => console.log(p));
+//   }
+
+//   otpHandler = message => {
+//     const val = /(\d{4})/g.exec(message)[1];
+//     this.setState({otp: val});
+//     RNOtpVerify.removeListener();
+//     // Keyboard.dismiss();
+//   };
+
+//   storeData = async value => {
+//     try {
+//       console.log('saved value to preference ' + value);
+//       const jsonValue = JSON.stringify(value);
+//       await AsyncStorage.setItem('isLogin', jsonValue);
+//     } catch (e) {
+//       // saving error
+//     }
+//   };
+//   _otpClick() {
+//     if (!this.state.otp.trim()) {
+//       alert('Please Enter otp');
+//       return;
+//     }
+//     if (this.state.otp.length < 4) {
+//       alert('Please Enter valid otp of length 10');
+//     } else {
+//       this.storeData(true);
+//       //this.props.navigation.navigate("detail", { key: '100' })
+//       //this.props.navigation.goBack();
+//       this.props.navigation.pop(2);
+//     }
+//   }
+//   componentWillUnmount() {
+//     RNOtpVerify.removeListener();
+//   }
+//   signInWithPhoneNumber = async phoneNumber => {
+//     console.log('Phone number is---' + phoneNumber);
+//     this.setState({loader: true});
+//     try {
+//       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+//       this.setState({loader: false});
+//       if (confirmation.verificationId.length > 0) {
+//         this.setState({isOptVisible: true});
+//         // this.props.navigation.navigate('otp', {
+//         //   key: confirmation,
+//         // });
+//         try {
+//           const codeConfirmation = await confirmation.confirm('234567');
+//           console.log(
+//             'Out put value ---' + codeConfirmation.additionalUserInfo.isNewUser,
+//           );
+//           console.log('Out put value ---' + codeConfirmation.user.uid);
+//           console.log(
+//             'Out put value ---' +
+//               codeConfirmation.additionalUserInfo.providerId,
+//           );
+//           console.log(
+//             'Out put value ---' + codeConfirmation.additionalUserInfo.username,
+//           );
+//         } catch (error) {
+//           alert(error);
+//         }
+//       } else {
+//         this.setState({isOptVisible: false});
+//       }
+//     } catch (err) {
+//       this.setState({isOptVisible: false});
+
+//       this.setState({loader: false});
+//       alert(err);
+
+//       console.log('error is===' + err);
+//     }
+//   };
+//   loginClick() {
+//     if (!this.state.phonenumber.trim()) {
+//       alert('Please Enter phone Number');
+//       return;
+//     }
+//     if (
+//       this.state.phonenumber.length < 10 ||
+//       this.state.phonenumber.length > 10
+//     ) {
+//       alert('Please Enter valid phone number of length 10');
+//     } else {
+//       //this.props.navigation.navigate('otp', { key: '100' });
+//       this.signInWithPhoneNumber('+91 ' + this.state.phonenumber);
+//     }
+//   }
+//   render() {
+//     return (
+//       <View style={styles.container}>
+//         <Spinner
+//           visible={this.state.loader}
+//           textContent="Loading..."
+//           textStyle={styles.spinnerTextStyle}
+//         />
+//         <View style={{width: '100%'}}>
+//           <TouchableOpacity
+//             style={{
+//               width: 30,
+//               borderRadius: 10,
+//               marginStart: 20,
+//               marginTop: 40,
+//               height: 30,
+//               backgroundColor: '#FA5252',
+//               alignItems: 'center',
+//               justifyContent: 'center',
+//             }}
+//             onPress={() => {
+//               console.log('clicked');
+//               this.props.navigation.pop(1);
+//             }}>
+//             <Image source={require('../assets/back.png')} />
+//           </TouchableOpacity>
+//         </View>
+//         <View
+//           style={{
+//             flex: 1,
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             width: '100%',
+//           }}>
+//           <StatusBar style="auto" />
+//           <Image
+//             source={require('../assets/crokery.png')}
+//             style={{height: 127, width: 128}}
+//           />
+//           <Text style={styles.title}>rate my Dine</Text>
+//           <Text style={{fontSize: 20, color: '#2E3A59'}}>
+//             Where you find best reataurants.
+//           </Text>
+//           <View style={styles.forgot_button}>
+//             <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
+//               We will send a one time SMS message Carrie rate may apply
+//             </Text>
+//           </View>
+//           {this.state.isOptVisible ? (
+//             <OTPInputView
+//               style={{width: '70%', height: 50}}
+//               pinCount={4}
+//               code={this.state.otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+//               onCodeChanged={code => {
+//                 this.setState({otp: code});
+//               }}
+//               autoFocusOnLoad
+//               codeInputFieldStyle={styles.underlineStyleBase}
+//               codeInputHighlightStyle={styles.underlineStyleHighLighted}
+//               onCodeFilled={code => {
+//                 console.log(`Code is ${code}, you are good to go!`);
+//                 this.setState({otp: code});
+//                 //this.props.navigation.navigate("detail", { key: '100' })
+//               }}
+//             />
+//           ) : (
+//             <View style={styles.inputView}>
+//               <TextInput
+//                 ref={this.input}
+//                 autoFocus={true}
+//                 keyboardType="numeric"
+//                 onChangeText={value =>
+//                   this.setState({phonenumber: value.replace(/[^0-9]/g, '')})
+//                 }
+//                 style={styles.TextInput}
+//                 placeholder="Pone number"
+//                 value={this.state.phonenumber}
+//                 placeholderTextColor="#2C2929"
+//               />
+//             </View>
+//           )}
+
+//           <TouchableOpacity
+//             style={styles.loginBtn}
+//             onPress={this.loginClick.bind(this)}>
+//             <View style={{flexDirection: 'row', alignItems: 'center'}}>
+//               <Text style={{color: '#fff', fontSize: 20}}>Get your OTP </Text>
+//               <Image source={require('../assets/next.png')} />
+//             </View>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     );
+//   }
+// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
