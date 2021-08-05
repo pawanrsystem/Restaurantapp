@@ -4,6 +4,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNOtpVerify from 'react-native-otp-verify';
+import auth from '@react-native-firebase/auth';
 
 class otp extends React.Component {
   constructor() {
@@ -12,7 +13,6 @@ class otp extends React.Component {
       otp: '',
     };
     RNOtpVerify.getHash().then(console.log).catch(console.log);
-
     RNOtpVerify.getOtp()
       .then(p => RNOtpVerify.addListener(this.otpHandler))
       .catch(p => console.log(p));
