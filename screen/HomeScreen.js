@@ -37,6 +37,22 @@ const HomeScreen = ({route, navigation}) => {
       // saving error
     }
   };
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      RNOtpVerify.getHash().then(console.log).catch(console.log);
+      RNOtpVerify.getOtp()
+        .then(p => RNOtpVerify.addListener(otpHandler))
+        .catch(p => console.log(p));
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const otpHandler = message => {
+    const otpValue = /(\d{4})/g.exec(message)[1];
+    setotp(otpValue);
+    RNOtpVerify.removeListener();
+    // Keyboard.dismiss();
+  };
   const _otpClick = () => {
     if (!otp.trim()) {
       alert('Please Enter otp');
