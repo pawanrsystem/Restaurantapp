@@ -84,6 +84,7 @@ const HomeScreen = ({route, navigation}) => {
   const verifyOtpClick = async () => {
     if (otp.length >= 6) {
       try {
+        setLoader(true);
         console.log('Otp Value is---' + otp);
         const codeConfirmation = await confirm.confirm(otp);
         console.log('Confirmation uuid' + codeConfirmation.user.uid);
@@ -92,7 +93,10 @@ const HomeScreen = ({route, navigation}) => {
           console.log('Token is---' + idToken);
           storeData(true);
         }
+        setLoader(false);
       } catch (error) {
+        setLoader(false);
+
         alert(error);
       }
     } else {
