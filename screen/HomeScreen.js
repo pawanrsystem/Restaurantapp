@@ -6,7 +6,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  InteractionManager,
   Alert,
   BackHandler,
 } from 'react-native';
@@ -16,6 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import RNOtpVerify from 'react-native-otp-verify';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AndroidBackHandler} from 'react-navigation-backhandler';
 
 const HomeScreen = ({route, navigation}) => {
   const [phonenumber, setphonenumber] = useState('');
@@ -26,7 +26,16 @@ const HomeScreen = ({route, navigation}) => {
   const [otp, setotp] = useState('');
   const [isOptVisible, setisOptVisible] = useState(false);
   const [confirm, setConfirm] = useState(null);
-
+  const onBackButtonPressAndroid = () => {
+    console.log('onBackButtonPressAndroid ');
+    if (isOptVisible) {
+      setisOptVisible(false);
+      setText('We will send a one time SMS message. Carrier rates may apply.');
+    } else {
+      navigation.pop(1);
+    }
+    return true;
+  };
   const storeData = async value => {
     try {
       console.log('saved value to preference ' + value);
@@ -52,7 +61,6 @@ const HomeScreen = ({route, navigation}) => {
           console.log('onAuthStateChanged = Not authenticated');
         }
       });
-      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     });
 
     return unsubscribe;
@@ -66,7 +74,7 @@ const HomeScreen = ({route, navigation}) => {
       setText('We will send a one time SMS message. Carrier rates may apply.');
     } else {
       console.log('handleBackButton 1');
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      //  BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
       navigation.pop(1);
     }
     return true;
@@ -140,121 +148,123 @@ const HomeScreen = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Spinner
-        visible={loader}
-        textContent="Loading..."
-        textStyle={styles.spinnerTextStyle}
-      />
-      <View style={{width: '100%'}}>
-        <TouchableOpacity
+    <AndroidBackHandler onBackPress={onBackButtonPressAndroid}>
+      <View style={styles.container}>
+        <Spinner
+          visible={loader}
+          textContent="Loading..."
+          textStyle={styles.spinnerTextStyle}
+        />
+        <View style={{width: '100%'}}>
+          <TouchableOpacity
+            style={{
+              width: 30,
+              borderRadius: 10,
+              marginStart: 20,
+              marginTop: 40,
+              height: 30,
+              backgroundColor: '#FA5252',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => {
+              if (isOptVisible) {
+                setisOptVisible(false);
+                setText(
+                  'We will send a one time SMS message. Carrier rates may apply.',
+                );
+              } else {
+                navigation.pop(1);
+              }
+              // navigation.pop(1);
+            }}>
+            <Image source={require('../assets/back.png')} />
+          </TouchableOpacity>
+        </View>
+        <View
           style={{
-            width: 30,
-            borderRadius: 10,
-            marginStart: 20,
-            marginTop: 40,
-            height: 30,
-            backgroundColor: '#FA5252',
+            flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-          }}
-          onPress={() => {
-            if (isOptVisible) {
-              setisOptVisible(false);
-              setText(
-                'We will send a one time SMS message. Carrier rates may apply.',
-              );
-            } else {
-              navigation.pop(1);
-            }
-            // navigation.pop(1);
+            width: '100%',
           }}>
-          <Image source={require('../assets/back.png')} />
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-        }}>
-        <StatusBar style="auto" />
-        <Image
-          source={require('../assets/crokery.png')}
-          style={{height: 127, width: 128}}
-        />
-        <Text style={styles.title}>rate my Dine</Text>
-        <Text style={{fontSize: 20, color: '#2E3A59'}}>
-          Where you find best reataurants.
-        </Text>
-        <View style={styles.forgot_button}>
-          <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
-            {text}{' '}
-          </Text>
-        </View>
-        {isOptVisible ? (
-          <OTPInputView
-            style={{width: '70%', height: 50}}
-            pinCount={6}
-            code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-            onCodeChanged={code => {
-              setotp(code);
-            }}
-            autoFocusOnLoad
-            codeInputFieldStyle={styles.underlineStyleBase}
-            codeInputHighlightStyle={styles.underlineStyleHighLighted}
-            onCodeFilled={code => {
-              console.log(`Code is ${code}, you are good to go!`);
-              setotp(code);
-              //verifyOtpClick(otp);
-              //this.props.navigation.navigate("detail", { key: '100' })
-            }}
+          <StatusBar style="auto" />
+          <Image
+            source={require('../assets/crokery.png')}
+            style={{height: 127, width: 128}}
           />
-        ) : (
-          <View style={styles.inputView}>
-            <TextInput
-              autoFocus={true}
-              keyboardType="numeric"
-              onChangeText={value => {
-                setphonenumber(value.replace(/[^0-9]/g, ''));
-              }}
-              style={styles.TextInput}
-              placeholder="Pone number"
-              value={phonenumber}
-              placeholderTextColor="#2C2929"
-            />
-          </View>
-        )}
-        {!isOptVisible ? (
-          <TouchableOpacity style={styles.loginBtn} onPress={loginClick}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{color: '#fff', fontSize: 20}}>Get your OTP </Text>
-              <Image source={require('../assets/next.png')} />
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.loginBtn} onPress={verifyOtpClick}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{color: '#fff', fontSize: 20}}>
-                Verify your OTP{' '}
-              </Text>
-              <Image source={require('../assets/next.png')} />
-            </View>
-          </TouchableOpacity>
-        )}
-        {isOptVisible ? (
-          <Text
-            style={{
-              textAlign: 'center',
-              textDecorationLine: 'underline',
-              color: '#807C7C',
-            }}>
-            Don't recieve on OTP?Resend
+          <Text style={styles.title}>rate my Dine</Text>
+          <Text style={{fontSize: 20, color: '#2E3A59'}}>
+            Where you find best reataurants.
           </Text>
-        ) : null}
+          <View style={styles.forgot_button}>
+            <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
+              {text}{' '}
+            </Text>
+          </View>
+          {isOptVisible ? (
+            <OTPInputView
+              style={{width: '70%', height: 50}}
+              pinCount={6}
+              code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+              onCodeChanged={code => {
+                setotp(code);
+              }}
+              autoFocusOnLoad
+              codeInputFieldStyle={styles.underlineStyleBase}
+              codeInputHighlightStyle={styles.underlineStyleHighLighted}
+              onCodeFilled={code => {
+                console.log(`Code is ${code}, you are good to go!`);
+                setotp(code);
+                //verifyOtpClick(otp);
+                //this.props.navigation.navigate("detail", { key: '100' })
+              }}
+            />
+          ) : (
+            <View style={styles.inputView}>
+              <TextInput
+                autoFocus={true}
+                keyboardType="numeric"
+                onChangeText={value => {
+                  setphonenumber(value.replace(/[^0-9]/g, ''));
+                }}
+                style={styles.TextInput}
+                placeholder="Pone number"
+                value={phonenumber}
+                placeholderTextColor="#2C2929"
+              />
+            </View>
+          )}
+          {!isOptVisible ? (
+            <TouchableOpacity style={styles.loginBtn} onPress={loginClick}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={{color: '#fff', fontSize: 20}}>Get your OTP </Text>
+                <Image source={require('../assets/next.png')} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.loginBtn} onPress={verifyOtpClick}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={{color: '#fff', fontSize: 20}}>
+                  Verify your OTP{' '}
+                </Text>
+                <Image source={require('../assets/next.png')} />
+              </View>
+            </TouchableOpacity>
+          )}
+          {isOptVisible ? (
+            <Text
+              style={{
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                color: '#807C7C',
+              }}>
+              Don't recieve on OTP?Resend
+            </Text>
+          ) : null}
+        </View>
       </View>
-    </View>
+    </AndroidBackHandler>
   );
 };
 // class HomeScreen extends React.Component {
