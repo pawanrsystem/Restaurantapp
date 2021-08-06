@@ -82,9 +82,10 @@ const HomeScreen = ({route, navigation}) => {
     }
   };
   const verifyOtpClick = async () => {
-    if (otp.length > 3) {
+    if (otp.length >= 6) {
       try {
-        const codeConfirmation = await confirm.confirm('234567');
+        console.log('Otp Value is---' + otp);
+        const codeConfirmation = await confirm.confirm(otp);
         console.log('Confirmation uuid' + codeConfirmation.user.uid);
         if (codeConfirmation.user.uid.length > 0) {
           const idToken = await auth().currentUser.getIdToken(true);
@@ -191,7 +192,7 @@ const HomeScreen = ({route, navigation}) => {
         {isOptVisible ? (
           <OTPInputView
             style={{width: '70%', height: 50}}
-            pinCount={4}
+            pinCount={6}
             code={otp} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
             onCodeChanged={code => {
               setotp(code);
