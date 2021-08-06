@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   InteractionManager,
   Alert,
+  BackHandler,
 } from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import auth from '@react-native-firebase/auth';
@@ -18,11 +19,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({route, navigation}) => {
   const [phonenumber, setphonenumber] = useState('');
-
+  const [text, setText] = useState(
+    'We will send a one time SMS message. Carrier rates may apply.',
+  );
   const [loader, setLoader] = useState(false);
-
   const [otp, setotp] = useState('');
-
   const [isOptVisible, setisOptVisible] = useState(false);
   const [confirm, setConfirm] = useState(null);
 
@@ -43,37 +44,51 @@ const HomeScreen = ({route, navigation}) => {
       RNOtpVerify.getOtp()
         .then(p => RNOtpVerify.addListener(otpHandler))
         .catch(p => console.log(p));
+
+      auth().onAuthStateChanged(user => {
+        if (user) {
+          console.log('onAuthStateChanged =' + user.phoneNumber);
+        } else {
+          console.log('onAuthStateChanged = Not authenticated');
+        }
+      });
+      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     });
+
     return unsubscribe;
   }, [navigation]);
 
-  const otpHandler = message => {
-    const otpValue = /(\d{4})/g.exec(message)[1];
-    setotp(otpValue);
-    RNOtpVerify.removeListener();
-    // Keyboard.dismiss();
-  };
-  const _otpClick = () => {
-    if (!otp.trim()) {
-      alert('Please Enter otp');
-      return;
-    }
-    if (otp.length < 4) {
-      alert('Please Enter valid otp of length 10');
+  const handleBackButton = () => {
+    console.log('handleBackButton' + isOptVisible);
+    if (isOptVisible) {
+      console.log('handleBackButton 1');
+      setisOptVisible(false);
+      setText('We will send a one time SMS message. Carrier rates may apply.');
     } else {
-      this.storeData(true);
-      //this.props.navigation.navigate("detail", { key: '100' })
-      //this.props.navigation.goBack();
-      navigation.pop(2);
+      console.log('handleBackButton 1');
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      navigation.pop(1);
+    }
+    return true;
+  };
+  const otpHandler = message => {
+    if (message != null && message != 'Timeout Error.') {
+      console.log('Message is----' + message);
+      const otpValue = /(\d{4})/g.exec(message)[1];
+      if (otpValue != null) {
+        setotp(otpValue);
+        RNOtpVerify.removeListener();
+      }
     }
   };
-
   const verifyOtpClick = async () => {
     if (otp.length > 3) {
       try {
-        console.log('New Value is----' + confirm.verificationId);
         const codeConfirmation = await confirm.confirm('234567');
+        console.log('Confirmation uuid' + codeConfirmation.user.uid);
         if (codeConfirmation.user.uid.length > 0) {
+          const idToken = await auth().currentUser.getIdToken(true);
+          console.log('Token is---' + idToken);
           storeData(true);
         }
       } catch (error) {
@@ -86,28 +101,24 @@ const HomeScreen = ({route, navigation}) => {
 
   const signInWithPhoneNumber = async phoneNumber => {
     console.log('Phone number is---' + phoneNumber);
-    //this.setState({loader: true});
     setLoader(true);
     try {
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      // this.setState({loader: false});
-
       if (confirmation.verificationId.length > 0) {
         setLoader(false);
-
         setisOptVisible(true);
-        //this.setState({isOptVisible: true});
-        // this.props.navigation.navigate('otp', {
-        //   key: confirmation,
-        // });
+        setText('Submit the 4 digit code you got on your provided number.');
         setConfirm(confirmation);
       } else {
+        alert('confirmation.verificationId.length less than 0');
+        setLoader(false);
         setisOptVisible(false);
       }
     } catch (err) {
       setisOptVisible(false);
       setLoader(false);
       alert(err);
+      console.log('Error----' + JSON.stringify(err));
       console.log('error is===' + err);
     }
   };
@@ -119,7 +130,6 @@ const HomeScreen = ({route, navigation}) => {
     if (phonenumber.length < 10 || phonenumber.length > 10) {
       alert('Please Enter valid phone number of length 10');
     } else {
-      //this.props.navigation.navigate('otp', { key: '100' });
       signInWithPhoneNumber('+91 ' + phonenumber);
     }
   };
@@ -144,8 +154,15 @@ const HomeScreen = ({route, navigation}) => {
             justifyContent: 'center',
           }}
           onPress={() => {
-            console.log('clicked');
-            navigation.pop(1);
+            if (isOptVisible) {
+              setisOptVisible(false);
+              setText(
+                'We will send a one time SMS message. Carrier rates may apply.',
+              );
+            } else {
+              navigation.pop(1);
+            }
+            // navigation.pop(1);
           }}>
           <Image source={require('../assets/back.png')} />
         </TouchableOpacity>
@@ -168,7 +185,7 @@ const HomeScreen = ({route, navigation}) => {
         </Text>
         <View style={styles.forgot_button}>
           <Text style={{textAlign: 'center', color: '#807C7C', fontSize: 14}}>
-            We will send a one time SMS message Carrie rate may apply
+            {text}{' '}
           </Text>
         </View>
         {isOptVisible ? (
@@ -221,6 +238,16 @@ const HomeScreen = ({route, navigation}) => {
             </View>
           </TouchableOpacity>
         )}
+        {isOptVisible ? (
+          <Text
+            style={{
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+              color: '#807C7C',
+            }}>
+            Don't recieve on OTP?Resend
+          </Text>
+        ) : null}
       </View>
     </View>
   );
