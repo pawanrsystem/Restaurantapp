@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,8 @@ import {AndroidBackHandler} from 'react-navigation-backhandler';
 
 const HomeScreen = ({route, navigation}) => {
   const [phonenumber, setphonenumber] = useState('');
+  const valueInputRef = React.useRef(null);
+
   const [text, setText] = useState(
     'We will send a one time SMS message. Carrier rates may apply.',
   );
@@ -61,8 +63,12 @@ const HomeScreen = ({route, navigation}) => {
         }
       });
     });
-
-    return unsubscribe;
+    console.log('output is-' + valueInputRef.current);
+    setTimeout(() => {
+      if (valueInputRef.current) {
+        valueInputRef.current.focus();
+      }
+    }, 40);
   }, [navigation]);
 
   const handleBackButton = () => {
@@ -223,6 +229,7 @@ const HomeScreen = ({route, navigation}) => {
           ) : (
             <View style={styles.inputView}>
               <TextInput
+                ref={valueInputRef}
                 autoFocus={true}
                 keyboardType="numeric"
                 onChangeText={value => {
