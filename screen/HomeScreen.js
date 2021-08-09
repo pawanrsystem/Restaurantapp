@@ -94,6 +94,7 @@ const HomeScreen = ({route, navigation}) => {
       }
     }
   };
+
   const verifyOtpClick = async () => {
     if (otp.length >= 6) {
       try {
@@ -120,26 +121,22 @@ const HomeScreen = ({route, navigation}) => {
   const signInWithPhoneNumber = async phoneNumber => {
     console.log('Phone number is---' + phoneNumber);
     setLoader(true);
-    try {
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      if (confirmation.verificationId.length > 0) {
+    const confirmation = await auth()
+      .signInWithPhoneNumber(phoneNumber, true)
+      .then(confirmResult => {
+        // save confirm result to use with the manual verification code)
         setLoader(false);
         setisOptVisible(true);
         setText('Submit the 4 digit code you got on your provided number.');
         setConfirm(confirmation);
-      } else {
-        console.log('Error----');
-        alert('confirmation.verificationId.length less than 0');
+        console.log('Out put value is---' + confirmResult.verificationId);
+      })
+      .catch(error => {
         setLoader(false);
         setisOptVisible(false);
-      }
-    } catch (err) {
-      setisOptVisible(false);
-      setLoader(false);
-      alert(err);
-      console.log('Error----' + JSON.stringify(err));
-      console.log('error is===' + err);
-    }
+        alert(JSON.stringify(error));
+        console.log('Out put value is---' + JSON.stringify(error));
+      });
   };
   const loginClick = () => {
     if (!phonenumber.trim()) {
