@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  BackHandler,
 } from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import auth from '@react-native-firebase/auth';
@@ -17,7 +16,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AndroidBackHandler} from 'react-navigation-backhandler';
 
-const HomeScreen = ({route, navigation}) => {
+const HomeScreen = ({navigation}) => {
   const [phonenumber, setphonenumber] = useState('');
   const valueInputRef = React.useRef(null);
 
@@ -45,25 +44,9 @@ const HomeScreen = ({route, navigation}) => {
       navigation.pop(1);
     } catch (e) {
       console.log('error is---' + e);
-      // saving error
     }
   };
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      RNOtpVerify.getHash().then(console.log).catch(console.log);
-      RNOtpVerify.getOtp()
-        .then(p => RNOtpVerify.addListener(otpHandler))
-        .catch(p => console.log(p));
-
-      auth().onAuthStateChanged(user => {
-        if (user) {
-          console.log('onAuthStateChanged =' + user.phoneNumber);
-        } else {
-          console.log('onAuthStateChanged = Not authenticated');
-        }
-      });
-    });
-    console.log('output is-' + valueInputRef.current);
     setTimeout(() => {
       if (valueInputRef.current) {
         valueInputRef.current.focus();
@@ -71,19 +54,6 @@ const HomeScreen = ({route, navigation}) => {
     }, 40);
   }, [navigation]);
 
-  const handleBackButton = () => {
-    console.log('handleBackButton' + isOptVisible);
-    if (isOptVisible) {
-      console.log('handleBackButton 1');
-      setisOptVisible(false);
-      setText('We will send a one time SMS message. Carrier rates may apply.');
-    } else {
-      console.log('handleBackButton 1');
-      //  BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
-      navigation.pop(1);
-    }
-    return true;
-  };
   const otpHandler = message => {
     if (message != null && message != 'Timeout Error.') {
       console.log('Message is----' + message);
@@ -179,7 +149,6 @@ const HomeScreen = ({route, navigation}) => {
               } else {
                 navigation.pop(1);
               }
-              // navigation.pop(1);
             }}>
             <Image source={require('../assets/back.png')} />
           </TouchableOpacity>
