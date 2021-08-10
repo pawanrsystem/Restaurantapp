@@ -16,6 +16,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import Geolocation from 'react-native-geolocation-service';
+import RestaurantView from '../screen/RestaurantView';
 
 const RestaurantScreen = ({route, navigation}) => {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -270,7 +271,9 @@ const RestaurantScreen = ({route, navigation}) => {
         }
         data={restaurantData}
         extraData={isRender}
-        renderItem={({item}) => <RenderItemComponent item={item} />}
+        renderItem={({item}) => (
+          <RestaurantView item={item} navigation={navigation} />
+        )}
       />
     </SafeAreaView>
   );
