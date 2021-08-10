@@ -121,14 +121,14 @@ const HomeScreen = ({route, navigation}) => {
   const signInWithPhoneNumber = async phoneNumber => {
     console.log('Phone number is---' + phoneNumber);
     setLoader(true);
-    const confirmation = await auth()
+    await auth()
       .signInWithPhoneNumber(phoneNumber, true)
       .then(confirmResult => {
         // save confirm result to use with the manual verification code)
         setLoader(false);
         setisOptVisible(true);
         setText('Submit the 4 digit code you got on your provided number.');
-        setConfirm(confirmation);
+        setConfirm(confirmResult);
         console.log('Out put value is---' + confirmResult.verificationId);
       })
       .catch(error => {
