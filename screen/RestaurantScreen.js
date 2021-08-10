@@ -248,6 +248,7 @@ const RestaurantScreen = ({route, navigation}) => {
         <Image source={require('../assets/search.png')} />
 
         <TextInput
+          returnKeyType="search"
           autoCapitalize="none"
           autoCorrect={false}
           clearButtonMode="always"
@@ -255,6 +256,9 @@ const RestaurantScreen = ({route, navigation}) => {
           value={restaurantInputValue}
           onChangeText={text => {
             setInputValue(text);
+          }}
+          onSubmitEditing={event => {
+            console.log('Searched text is---' + event.nativeEvent.text);
           }}
         />
       </View>
