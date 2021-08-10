@@ -46,6 +46,26 @@ const RestaurantDetail = ({route, navigation}) => {
   ]);
 
   const {key} = route.params;
+  const RenderItemComponent = ({item}) => (
+    <View style={{marginHorizontal: 20, marginTop: 10}}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Image
+          source={require('../assets/dummy_user.png')}
+          style={{height: 35, width: 35, borderRadius: 20}}
+        />
+        <Text style={{paddingStart: 10}}>{item.title}</Text>
+        <Text style={{paddingStart: 10, color: '#B4BBC6'}}>24 min</Text>
+      </View>
+      <Text style={{paddingTop: 5}}>
+        But don't you think the timing is off because many other apps have done
+        this even earlier, causing people to switch apps?
+      </Text>
+      <Image
+        source={require('../assets/dummy_user.png')}
+        style={{height: 189, width: '100%', marginTop: 15}}
+      />
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -173,30 +193,7 @@ const RestaurantDetail = ({route, navigation}) => {
           nestedScrollEnabled={true}
           keyExtractor={(comments, index) => index.toString()}
           data={comments}
-          renderItem={({item}) => {
-            return (
-              <View style={{marginHorizontal: 20, marginTop: 10}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Image
-                    source={require('../assets/dummy_user.png')}
-                    style={{height: 35, width: 35, borderRadius: 20}}
-                  />
-                  <Text style={{paddingStart: 10}}>{item.title}</Text>
-                  <Text style={{paddingStart: 10, color: '#B4BBC6'}}>
-                    24 min
-                  </Text>
-                </View>
-                <Text style={{paddingTop: 5}}>
-                  But don't you think the timing is off because many other apps
-                  have done this even earlier, causing people to switch apps?
-                </Text>
-                <Image
-                  source={require('../assets/dummy_user.png')}
-                  style={{height: 189, width: '100%', marginTop: 15}}
-                />
-              </View>
-            );
-          }}
+          renderItem={({item}) => <RenderItemComponent item={item} />}
         />
       </View>
     </View>
