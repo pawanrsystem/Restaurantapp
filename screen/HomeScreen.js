@@ -47,6 +47,10 @@ const HomeScreen = ({navigation}) => {
     }
   };
   React.useEffect(() => {
+    RNOtpVerify.getHash().then(console.log).catch(console.log);
+    RNOtpVerify.getOtp()
+      .then(p => RNOtpVerify.addListener(otpHandler))
+      .catch(p => console.log('Otp verifier Error--' + p));
     setTimeout(() => {
       if (valueInputRef.current) {
         valueInputRef.current.focus();
@@ -92,7 +96,7 @@ const HomeScreen = ({navigation}) => {
     console.log('Phone number is---' + phoneNumber);
     setLoader(true);
     await auth()
-      .signInWithPhoneNumber(phoneNumber, true)
+      .signInWithPhoneNumber(phoneNumber)
       .then(confirmResult => {
         // save confirm result to use with the manual verification code)
         setLoader(false);
