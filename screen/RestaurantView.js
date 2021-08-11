@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import StarRating from 'react-native-star-rating';
 
-const RestaurantView = ({item, navigation}) => {
+const RestaurantView = ({item, navigation, onStarClick}) => {
   return (
     <TouchableOpacity
       style={{
@@ -72,10 +72,7 @@ const RestaurantView = ({item, navigation}) => {
                 maxStars={5}
                 rating={item.id}
                 selectedStar={rating => {
-                  var index = restaurantData.indexOf(item);
-                  restaurantData[index].id = rating;
-                  setRestaurantData(restaurantData);
-                  setRender(!isRender);
+                  onStarClick(rating, item);
                 }}
                 emptyStar={require('../assets/empty_star.png')}
                 fullStar={require('../assets/fill_star.png')}

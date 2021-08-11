@@ -9,6 +9,7 @@ import {
   TextInput,
   SafeAreaView,
   RefreshControl,
+  TouchableOpacityBase,
 } from 'react-native';
 import APIKit from './api/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,7 +19,7 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import Geolocation from 'react-native-geolocation-service';
 import RestaurantView from '../screen/RestaurantView';
 
-const RestaurantScreen = ({route, navigation}) => {
+const RestaurantScreen = ({navigation}) => {
   const [restaurantData, setRestaurantData] = useState([]);
   const [isLogedIn, setIsLogedIn] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -120,98 +121,6 @@ const RestaurantScreen = ({route, navigation}) => {
     //Clear old data of the list
     ApiCall();
   };
-  const RenderItemComponent = ({item}) => (
-    <TouchableOpacity
-      style={{
-        marginTop: 15,
-        marginBottom: 15,
-        shadowOffset: {width: 10, height: 10},
-        shadowColor: 'black',
-        shadowOpacity: 3,
-        elevation: 6,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-      }}
-      onPress={event => {
-        //  alert(`${item.name}`);
-        navigation.navigate('Restaurant detail', {key: item});
-      }}>
-      <View style={{flexDirection: 'row'}}>
-        <Image
-          source={{uri: item.avatar}}
-          style={{height: 126, width: 110, borderRadius: 10}}
-        />
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'space-between',
-            margin: 10,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 16, color: '#0A0A0A'}}>
-              {item.first_name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                color: '#0A0A0A',
-                alignItems: 'flex-end',
-              }}>
-              5 KM{' '}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 16, color: '#0A0A0A'}}>
-              {item.last_name}
-            </Text>
-            <Image
-              source={require('../assets/heart_filled.png')}
-              style={{height: 22, width: 22}}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <View style={{width: '50%', flexDirection: 'row'}}>
-              <StarRating
-                starSize={20}
-                halfStarEnabled={false}
-                disabled={false}
-                maxStars={5}
-                rating={item.id}
-                selectedStar={rating => {
-                  var index = restaurantData.indexOf(item);
-                  restaurantData[index].id = rating;
-                  setRestaurantData(restaurantData);
-                  setRender(!isRender);
-                }}
-                emptyStar={require('../assets/empty_star.png')}
-                fullStar={require('../assets/fill_star.png')}
-              />
-              <Text style={{paddingStart: 5}}>+91</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <Image
-                source={require('../assets/comment_filled.png')}
-                style={{height: 22, width: 22}}
-              />
-              <Text style={{paddingStart: 2}}>5</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
   return (
     <SafeAreaView style={styles.container}>
       <Spinner
@@ -221,21 +130,40 @@ const RestaurantScreen = ({route, navigation}) => {
       />
       <View>
         {isLogedIn ? (
-          <Text
-            style={{textAlign: 'right', padding: 20}}
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate('profile', {key: '100'});
             }}>
-            Profile
-          </Text>
+            <Image
+              source={require('../assets/dummy_user.png')}
+              style={{
+                textAlign: 'right',
+                padding: 20,
+                width: 40,
+                height: 40,
+                margin: 10,
+                borderRadius: 5,
+              }}></Image>
+          </TouchableOpacity>
         ) : (
-          <Text
-            style={{textAlign: 'right', padding: 20}}
+          <TouchableOpacity
+            style={{
+              textAlign: 'right',
+            }}
             onPress={() => {
               navigation.navigate('Home', {key: '100'});
             }}>
-            Login
-          </Text>
+            <Image
+              source={require('../assets/profile.png')}
+              style={{
+                textAlign: 'right',
+                padding: 20,
+                width: 40,
+                height: 40,
+                margin: 10,
+                borderRadius: 5,
+              }}></Image>
+          </TouchableOpacity>
         )}
       </View>
       <View
@@ -272,7 +200,18 @@ const RestaurantScreen = ({route, navigation}) => {
         data={restaurantData}
         extraData={isRender}
         renderItem={({item}) => (
-          <RestaurantView item={item} navigation={navigation} />
+          <RestaurantView
+            item={item}
+            navigation={navigation}
+            onStarClick={(rating, item) => {
+              console.log('clicked' + rating);
+              console.log('clicked' + item.first_name);
+              var index = restaurantData.indexOf(item);
+              restaurantData[index].id = rating;
+              setRestaurantData(restaurantData);
+              setRender(!isRender);
+            }}
+          />
         )}
       />
     </SafeAreaView>
