@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import StarRating from 'react-native-star-rating';
 
-const RestaurantView = props => {
+const RestaurantView = ({item, navigation}) => {
   return (
     <TouchableOpacity
       style={{
@@ -16,11 +16,11 @@ const RestaurantView = props => {
         borderRadius: 10,
       }}
       onPress={event => {
-        props.navigation.navigate('Restaurant detail', {key: props.item});
+        navigation.navigate('Restaurant detail', {key: item});
       }}>
       <View style={{flexDirection: 'row'}}>
         <Image
-          source={{uri: props.item.avatar}}
+          source={{uri: item.avatar}}
           style={{height: 126, width: 110, borderRadius: 10}}
         />
         <View
@@ -35,7 +35,7 @@ const RestaurantView = props => {
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: 16, color: '#0A0A0A'}}>
-              {props.item.first_name}
+              {item.first_name}
             </Text>
             <Text
               style={{
@@ -52,7 +52,7 @@ const RestaurantView = props => {
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: 16, color: '#0A0A0A'}}>
-              {props.item.last_name}
+              {item.last_name}
             </Text>
             <Image
               source={require('../assets/heart_filled.png')}
@@ -70,9 +70,9 @@ const RestaurantView = props => {
                 halfStarEnabled={false}
                 disabled={false}
                 maxStars={5}
-                rating={props.item.id}
+                rating={item.id}
                 selectedStar={rating => {
-                  var index = restaurantData.indexOf(props.item);
+                  var index = restaurantData.indexOf(item);
                   restaurantData[index].id = rating;
                   setRestaurantData(restaurantData);
                   setRender(!isRender);
