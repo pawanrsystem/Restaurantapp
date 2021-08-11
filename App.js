@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import RestaurantScreen from './screen/Screens/RestaurantScreen';
-import HomeScreen from './screen/Screens/HomeScreen';
-import LoginScreen from './screen/Screens/LoginScreen';
-import Camera from './screen/Screens/camera';
-import otp from './screen/Screens/otp';
-import Profile from './screen/Screens/Profile';
-import RestaurantDetail from './screen/Screens/RestaurantDetail';
-import Map from './screen/Screens/Map';
+import RestaurantScreen from './src/Screens/RestaurantScreen';
+import HomeScreen from './src/Screens/HomeScreen';
+import LoginScreen from './src/Screens/LoginScreen';
+import Camera from './src/Screens/camera';
+import otp from './src/Screens/otp';
+import Profile from './src/Screens/Profile';
+import RestaurantDetail from './src/Screens/RestaurantDetail';
+import Map from './src/Screens/Map';
 const Stack = createStackNavigator();
 
 const App = () => {
