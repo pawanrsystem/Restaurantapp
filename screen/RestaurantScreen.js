@@ -137,7 +137,6 @@ const RestaurantScreen = ({navigation}) => {
             <Image
               source={require('../assets/dummy_user.png')}
               style={{
-                textAlign: 'right',
                 padding: 20,
                 width: 40,
                 height: 40,
@@ -156,7 +155,6 @@ const RestaurantScreen = ({navigation}) => {
             <Image
               source={require('../assets/profile.png')}
               style={{
-                textAlign: 'right',
                 padding: 20,
                 width: 40,
                 height: 40,
