@@ -66,7 +66,7 @@ const RestaurantScreen = ({navigation}) => {
               },
               {
                 enableHighAccuracy: false,
-                timeout: 24000,
+                timeout: 240000,
                 maximumAge: 3000,
               },
             );
