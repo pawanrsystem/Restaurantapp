@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Text,
   FlatList,
   StyleSheet,
   TouchableOpacity,
@@ -9,12 +8,10 @@ import {
   TextInput,
   SafeAreaView,
   RefreshControl,
-  TouchableOpacityBase,
 } from 'react-native';
 import APIKit from './api/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import StarRating from 'react-native-star-rating';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import Geolocation from 'react-native-geolocation-service';
 import RestaurantView from '../screen/RestaurantView';
@@ -30,6 +27,7 @@ const RestaurantScreen = ({navigation}) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      getData();
       console.log('input value is===' + restaurantInputValue);
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
         message:
@@ -57,23 +55,7 @@ const RestaurantScreen = ({navigation}) => {
             Geolocation.getCurrentPosition(
               data => {
                 console.log('Location is----' + data.coords.latitude);
-                const getData = async () => {
-                  try {
-                    const value = await AsyncStorage.getItem('isLogin');
-                    if (value !== null) {
-                      // value previously stored
-                      console.log('get value from preference ' + value);
-                      setIsLogedIn(value);
-                    } else {
-                      console.log('get value from preference ' + value);
-                      setIsLogedIn(false);
-                    }
-                  } catch (e) {
-                    setIsLogedIn(false);
-                    console.log('current value is exception' + value);
-                  }
-                };
-                getData();
+
                 setLoader(true);
                 setLoaderValue('Getting Restaurant List');
                 ApiCall();
@@ -115,7 +97,22 @@ const RestaurantScreen = ({navigation}) => {
         alert(error.message);
       });
   };
-
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('isLogin');
+      if (value !== null) {
+        // value previously stored
+        console.log('get value from preference ' + value);
+        setIsLogedIn(value);
+      } else {
+        console.log('get value from preference ' + value);
+        setIsLogedIn(false);
+      }
+    } catch (e) {
+      setIsLogedIn(false);
+      console.log('current value is exception' + value);
+    }
+  };
   const onRefresh = () => {
     setRefreshing(true);
     //Clear old data of the list
