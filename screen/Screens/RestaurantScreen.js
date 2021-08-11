@@ -9,12 +9,12 @@ import {
   SafeAreaView,
   RefreshControl,
 } from 'react-native';
-import APIKit from './api/APIKit';
+import APIKit from '../api/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import Geolocation from 'react-native-geolocation-service';
-import RestaurantView from '../screen/RestaurantView';
+import RestaurantView from '../component/RestaurantView';
 
 const RestaurantScreen = ({navigation}) => {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -132,7 +132,7 @@ const RestaurantScreen = ({navigation}) => {
               navigation.navigate('profile', {key: '100'});
             }}>
             <Image
-              source={require('../assets/dummy_user.png')}
+              source={require('../../assets/dummy_user.png')}
               style={{
                 padding: 20,
                 width: 40,
@@ -150,7 +150,7 @@ const RestaurantScreen = ({navigation}) => {
               navigation.navigate('Home', {key: '100'});
             }}>
             <Image
-              source={require('../assets/profile.png')}
+              source={require('../../assets/profile.png')}
               style={{
                 padding: 20,
                 width: 40,
@@ -169,7 +169,7 @@ const RestaurantScreen = ({navigation}) => {
           borderRadius: 10,
           alignItems: 'center',
         }}>
-        <Image source={require('../assets/search.png')} />
+        <Image source={require('../../assets/search.png')} />
 
         <TextInput
           returnKeyType="search"

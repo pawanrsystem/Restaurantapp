@@ -50,7 +50,7 @@ const RestaurantDetail = ({route, navigation}) => {
     <View style={{marginHorizontal: 20, marginTop: 10}}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image
-          source={require('../assets/dummy_user.png')}
+          source={require('../../assets/dummy_user.png')}
           style={{height: 35, width: 35, borderRadius: 20}}
         />
         <Text style={{paddingStart: 10}}>{item.title}</Text>
@@ -61,7 +61,7 @@ const RestaurantDetail = ({route, navigation}) => {
         this even earlier, causing people to switch apps?
       </Text>
       <Image
-        source={require('../assets/dummy_user.png')}
+        source={require('../../assets/dummy_user.png')}
         style={{height: 189, width: '100%', marginTop: 15}}
       />
     </View>
@@ -84,7 +84,7 @@ const RestaurantDetail = ({route, navigation}) => {
           onPress={() => {
             navigation.pop(1);
           }}>
-          <Image source={require('../assets/back.png')} />
+          <Image source={require('../../assets/back.png')} />
         </TouchableOpacity>
       </View>
       <View
@@ -133,8 +133,8 @@ const RestaurantDetail = ({route, navigation}) => {
                     selectedStar={rating => {
                       setRating(rating);
                     }}
-                    emptyStar={require('../assets/empty_star.png')}
-                    fullStar={require('../assets/fill_star.png')}
+                    emptyStar={require('../../assets/empty_star.png')}
+                    fullStar={require('../../assets/fill_star.png')}
                   />
                 </View>
 

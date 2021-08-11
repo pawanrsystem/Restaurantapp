@@ -45,7 +45,7 @@ class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.pop(1);
             }}>
-            <Image source={require('../assets/back.png')} />
+            <Image source={require('../../assets/back.png')} />
           </TouchableOpacity>
         </View>
         <ScrollView
@@ -65,7 +65,7 @@ class Profile extends React.Component {
                 this.props.navigation.navigate('camera');
               }}>
               <Image
-                source={require('../assets/dummy_user.png')}
+                source={require('../../assets/dummy_user.png')}
                 style={{height: 196, width: 196, borderRadius: 20}}
               />
             </TouchableOpacity>

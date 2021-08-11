@@ -4,7 +4,7 @@ import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import APIKit from './api/APIKit';
+import APIKit from '../api/APIKit';
 class LoginScreen extends React.Component {
   storeData = async value => {
     try {

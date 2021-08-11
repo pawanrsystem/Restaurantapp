@@ -154,7 +154,7 @@ const HomeScreen = ({navigation}) => {
                 navigation.pop(1);
               }
             }}>
-            <Image source={require('../assets/back.png')} />
+            <Image source={require('../../assets/back.png')} />
           </TouchableOpacity>
         </View>
         <View
@@ -166,7 +166,7 @@ const HomeScreen = ({navigation}) => {
           }}>
           <StatusBar style="auto" />
           <Image
-            source={require('../assets/crokery.png')}
+            source={require('../../assets/crokery.png')}
             style={{height: 127, width: 128}}
           />
           <Text style={styles.title}>rate my Dine</Text>
@@ -216,7 +216,7 @@ const HomeScreen = ({navigation}) => {
             <TouchableOpacity style={styles.loginBtn} onPress={loginClick}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={{color: '#fff', fontSize: 20}}>Get your OTP </Text>
-                <Image source={require('../assets/next.png')} />
+                <Image source={require('../../assets/next.png')} />
               </View>
             </TouchableOpacity>
           ) : (
@@ -225,7 +225,7 @@ const HomeScreen = ({navigation}) => {
                 <Text style={{color: '#fff', fontSize: 20}}>
                   Verify your OTP{' '}
                 </Text>
-                <Image source={require('../assets/next.png')} />
+                <Image source={require('../../assets/next.png')} />
               </View>
             </TouchableOpacity>
           )}

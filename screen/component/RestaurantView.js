@@ -55,7 +55,7 @@ const RestaurantView = ({item, navigation, onStarClick}) => {
               {item.last_name}
             </Text>
             <Image
-              source={require('../assets/heart_filled.png')}
+              source={require('../../assets/heart_filled.png')}
               style={{height: 22, width: 22}}
             />
           </View>
@@ -74,14 +74,14 @@ const RestaurantView = ({item, navigation, onStarClick}) => {
                 selectedStar={rating => {
                   onStarClick(rating, item);
                 }}
-                emptyStar={require('../assets/empty_star.png')}
-                fullStar={require('../assets/fill_star.png')}
+                emptyStar={require('../../assets/empty_star.png')}
+                fullStar={require('../../assets/fill_star.png')}
               />
               <Text style={{paddingStart: 5}}>+91</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
               <Image
-                source={require('../assets/comment_filled.png')}
+                source={require('../../assets/comment_filled.png')}
                 style={{height: 22, width: 22}}
               />
               <Text style={{paddingStart: 2}}>5</Text>

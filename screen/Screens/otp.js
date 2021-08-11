@@ -70,7 +70,7 @@ class otp extends React.Component {
               console.log('clicked');
               this.props.navigation.pop(1);
             }}>
-            <Image source={require('../assets/back.png')} />
+            <Image source={require('../../assets/back.png')} />
           </TouchableOpacity>
         </View>
         <View
@@ -82,7 +82,7 @@ class otp extends React.Component {
           }}>
           <StatusBar style="auto" />
           <Image
-            source={require('../assets/crokery.png')}
+            source={require('../../assets/crokery.png')}
             style={{height: 127, width: 128}}
           />
           <Text style={styles.title}>rate my Dine</Text>
@@ -117,7 +117,7 @@ class otp extends React.Component {
               <Text style={{color: '#fff', fontSize: 20}}>
                 Verify your OTP{' '}
               </Text>
-              <Image source={require('../assets/next.png')} />
+              <Image source={require('../../assets/next.png')} />
             </View>
           </TouchableOpacity>
           <Text
