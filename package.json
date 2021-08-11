@@ -51,6 +51,7 @@
     "react-native-stars": "^1.2.2",
     "react-native-use-permissions": "^0.1.2",
     "react-navigation": "^4.1.1",
+    "react-navigation-backhandler": "^2.0.1",
     "react-navigation-stack": "^2.10.4",
     "react-star-ratings": "^2.3.0"
   },
