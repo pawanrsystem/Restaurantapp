@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import StarRating from 'react-native-star-rating';
 
-const RestaurantView = ({item, navigation, onStarClick}) => {
+const RestaurantView = ({item, navigation, onStarClick, onFavoriteClick}) => {
   return (
     <TouchableOpacity
       style={{
@@ -54,10 +54,27 @@ const RestaurantView = ({item, navigation, onStarClick}) => {
             <Text style={{fontSize: 16, color: '#0A0A0A'}}>
               {item.last_name}
             </Text>
-            <Image
-              source={require('../../assets/heart_filled.png')}
-              style={{height: 22, width: 22}}
-            />
+            {item.isFavorite ? (
+              <TouchableOpacity
+                onPress={() => {
+                  onFavoriteClick(!item.isFavorite, item);
+                }}>
+                <Image
+                  source={require('../../assets/heart_filled.png')}
+                  style={{height: 22, width: 22}}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  onFavoriteClick(!item.isFavorite, item);
+                }}>
+                <Image
+                  source={require('../../assets/heart_empty.png')}
+                  style={{height: 22, width: 22}}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View
             style={{

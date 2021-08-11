@@ -87,7 +87,11 @@ const RestaurantScreen = ({navigation}) => {
       .then(function (response) {
         // handle success
         //alert(JSON.stringify(response.data));
-        setRestaurantData(response.data.data);
+        setRestaurantData(
+          response.data.data.map((ele, i) => {
+            return {...ele, isFavorite: false};
+          }),
+        );
         setLoader(false);
         setRefreshing(false);
       })
@@ -199,10 +203,14 @@ const RestaurantScreen = ({navigation}) => {
             item={item}
             navigation={navigation}
             onStarClick={(rating, item) => {
-              console.log('clicked' + rating);
-              console.log('clicked' + item.first_name);
               var index = restaurantData.indexOf(item);
               restaurantData[index].id = rating;
+              setRestaurantData(restaurantData);
+              setRender(!isRender);
+            }}
+            onFavoriteClick={(isFavorite, item) => {
+              var index = restaurantData.indexOf(item);
+              restaurantData[index].isFavorite = isFavorite;
               setRestaurantData(restaurantData);
               setRender(!isRender);
             }}
