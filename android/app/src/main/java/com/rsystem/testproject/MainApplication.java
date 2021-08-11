@@ -1,4 +1,4 @@
-package com.testproject;
+package com.rsystem.testproject;
 
 import android.app.Application;
 import android.content.Context;

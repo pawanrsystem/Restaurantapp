@@ -1,78 +1,41 @@
 {
   "project_info": {
-    "project_number": "70606757629",
-    "project_id": "ratemydine",
-    "storage_bucket": "ratemydine.appspot.com"
+    "project_number": "872834143180",
+    "project_id": "testratemydine",
+    "storage_bucket": "testratemydine.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:70606757629:android:259ff77d8882b342862894",
+        "mobilesdk_app_id": "1:872834143180:android:57048b4d61609ba0878369",
         "android_client_info": {
-          "package_name": "com.rsystems.ratemydine"
+          "package_name": "com.rsystem.testproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "70606757629-dpgavd75klecbaimfr1qv7pm3642a6uc.apps.googleusercontent.com",
+          "client_id": "872834143180-cg8ur6teva4b4pgb62olb3olpa67alhq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rsystems.ratemydine",
-            "certificate_hash": "42e44b8114be42cb159eb4430e43248340859dbc"
-          }
-        },
-        {
-          "client_id": "70606757629-gdq2h8036kdeb4u7l12n155udtq60lvs.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCYFROjJOwBTqa0AAwi91paG2Wf_qR0fxg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "70606757629-gdq2h8036kdeb4u7l12n155udtq60lvs.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:70606757629:android:0cdf723f85059cbc862894",
-        "android_client_info": {
-          "package_name": "com.testproject"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "70606757629-8qa3gd2dfkma0fbp2e44c43f217hkpfi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.testproject",
+            "package_name": "com.rsystem.testproject",
             "certificate_hash": "80b31aa05c419214dcfd08f99ebbe96914759d8b"
           }
         },
         {
-          "client_id": "70606757629-gdq2h8036kdeb4u7l12n155udtq60lvs.apps.googleusercontent.com",
+          "client_id": "872834143180-5cnup08rf63u37oea9dojpfkhhpekkhh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCYFROjJOwBTqa0AAwi91paG2Wf_qR0fxg"
+          "current_key": "AIzaSyCiJZ-wHAU08_d61ck7X4DzkRXblexvjUQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "70606757629-gdq2h8036kdeb4u7l12n155udtq60lvs.apps.googleusercontent.com",
+              "client_id": "872834143180-5cnup08rf63u37oea9dojpfkhhpekkhh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,4 +1,4 @@
-package com.testproject;
+package com.rsystem.testproject;
 
 import com.facebook.react.ReactActivity;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;

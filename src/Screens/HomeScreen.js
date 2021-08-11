@@ -95,8 +95,19 @@ const HomeScreen = ({navigation}) => {
   const signInWithPhoneNumber = async phoneNumber => {
     console.log('Phone number is---' + phoneNumber);
     setLoader(true);
+    // commented for for exception check
+    // try {
+    //   const confirmResult = await auth().signInWithPhoneNumber(
+    //     phoneNumber,
+    //     true,
+    //   );
+    // } catch (error) {
+    //   setLoader(false);
+    //   alert(JSON.stringify(error));
+    //   console.log('Out put value is---' + JSON.stringify(error));
+    // }
     await auth()
-      .signInWithPhoneNumber(phoneNumber)
+      .signInWithPhoneNumber(phoneNumber, true)
       .then(confirmResult => {
         // save confirm result to use with the manual verification code)
         setLoader(false);
@@ -120,7 +131,7 @@ const HomeScreen = ({navigation}) => {
     if (phonenumber.length < 10 || phonenumber.length > 10) {
       alert('Please Enter valid phone number of length 10');
     } else {
-      signInWithPhoneNumber('+91 ' + phonenumber);
+      signInWithPhoneNumber('+91' + phonenumber);
     }
   };
 
