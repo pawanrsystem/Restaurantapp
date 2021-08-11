@@ -93,35 +93,25 @@ const HomeScreen = ({navigation}) => {
   };
 
   const signInWithPhoneNumber = async phoneNumber => {
-    console.log('Phone number is---' + phoneNumber);
-    setLoader(true);
-    // commented for for exception check
-    // try {
-    //   const confirmResult = await auth().signInWithPhoneNumber(
-    //     phoneNumber,
-    //     true,
-    //   );
-    // } catch (error) {
-    //   setLoader(false);
-    //   alert(JSON.stringify(error));
-    //   console.log('Out put value is---' + JSON.stringify(error));
-    // }
-    await auth()
-      .signInWithPhoneNumber(phoneNumber, true)
-      .then(confirmResult => {
-        // save confirm result to use with the manual verification code)
+    try {
+      setLoader(true);
+      const confirmResult = await auth().signInWithPhoneNumber(
+        phoneNumber,
+        true,
+      );
+      console.log(confirmResult);
+      if (confirmResult) {
         setLoader(false);
         setisOptVisible(true);
         setText('Submit the 4 digit code you got on your provided number.');
         setConfirm(confirmResult);
-        console.log('Out put value is---' + confirmResult.verificationId);
-      })
-      .catch(error => {
-        setLoader(false);
-        setisOptVisible(false);
-        alert(JSON.stringify(error));
-        console.log('Out put value is---' + JSON.stringify(error));
-      });
+      }
+    } catch (error) {
+      setLoader(false);
+      alert(error);
+
+      console.log(error);
+    }
   };
   const loginClick = () => {
     if (!phonenumber.trim()) {
