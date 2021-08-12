@@ -62,7 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
         since Flipper library is not available in release mode
         */
         
-        Class<?> aClass = Class.forName("com.rsystem.testproject.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.testproject.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);
